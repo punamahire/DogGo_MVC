@@ -22,6 +22,9 @@
                 @Html.DisplayNameFor(model => model.NeighborhoodId)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Neighborhood.Name)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ImageUrl)
             </th>
             <th></th>
@@ -38,6 +41,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NeighborhoodId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Neighborhood.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageUrl)
