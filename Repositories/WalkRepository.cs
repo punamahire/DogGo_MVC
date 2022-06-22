@@ -1,4 +1,5 @@
 ﻿using DogGo.Models;
+using DogGo.Models.ViewModels;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -62,5 +63,31 @@ namespace DogGo.Repositories
                 }
             }
         }
+
+        public void AddWalk(Walk walk)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    INSERT INTO Walks (Date, Duration, WalkerId, DogId)
+                    OUTPUT INSERTED.ID
+                    VALUES (@date, @duration, @walkerId, @dogId);    
+                ";
+
+                    cmd.Parameters.AddWithValue("@date", walk.Date);
+                    cmd.Parameters.AddWithValue("@duration", walk.Duration);
+                    cmd.Parameters.AddWithValue("@walkerid", walk.WalkerId);
+                    cmd.Parameters.AddWithValue("@dogId", walk.DogId);
+                    
+                    int id = (int)cmd.ExecuteScalar();
+
+                    walk.Id = id;
+                }
+            }
+        }
+
     }
 }
