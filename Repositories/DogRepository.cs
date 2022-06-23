@@ -171,12 +171,33 @@ namespace DogGo.Repositories
                     cmd.Parameters.AddWithValue("@name", dog.Name);
                     cmd.Parameters.AddWithValue("@breed", dog.Breed);
                     cmd.Parameters.AddWithValue("@ownerId", dog.OwnerId);
-                    cmd.Parameters.AddWithValue("@notes", ((object)dog.Notes) ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@imageUrl", ((object)dog.ImageUrl) ?? DBNull.Value);
 
-                    int id = (int)cmd.ExecuteScalar();
+                    // use this format or the below one for nullable columns
+                    // cmd.Parameters.AddWithValue("@notes", ((object)dog.Notes) ?? DBNull.Value);
+                    // cmd.Parameters.AddWithValue("@imageUrl", ((object)dog.ImageUrl) ?? DBNull.Value);
 
-                    dog.Id = id;
+                    // nullable columns
+                    if (dog.Notes == null)
+                    {
+                        cmd.Parameters.AddWithValue("@notes", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@notes", dog.Notes);
+                    }
+
+                    if (dog.ImageUrl == null)
+                    {
+                        cmd.Parameters.AddWithValue("@imageUrl", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@imageUrl", dog.ImageUrl);
+                    }
+
+                    int newlyCreatedId = (int)cmd.ExecuteScalar();
+
+                    dog.Id = newlyCreatedId;
                 }
             }
         }
